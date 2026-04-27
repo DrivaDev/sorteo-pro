@@ -69,7 +69,7 @@ export default function Settings() {
               <XCircle size={18} className="text-brand-text/30" />
               <span className="text-sm text-brand-text/60">No conectado</span>
             </div>
-            <a href="/api/instagram/connect" className="btn btn-primary text-sm gap-2">
+            <a href={`/api/instagram/connect?token=${localStorage.getItem('token')}`} className="btn btn-primary text-sm gap-2">
               <Instagram size={14} /> Conectar
             </a>
           </div>

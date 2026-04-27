@@ -129,7 +129,7 @@ export default function NewRaffle() {
                   <Instagram size={32} className="ig-gradient-text mx-auto mb-3" />
                   <p className="font-semibold text-brand-dark mb-1">Conectá tu cuenta de Instagram</p>
                   <p className="text-sm text-brand-text/60 mb-4">Necesitás conectar Instagram para acceder a los comentarios de tus publicaciones.</p>
-                  <a href="/api/instagram/connect" className="btn btn-primary gap-2">
+                  <a href={`/api/instagram/connect?token=${localStorage.getItem('token')}`} className="btn btn-primary gap-2">
                     <Instagram size={15} /> Conectar Instagram
                   </a>
                 </div>
