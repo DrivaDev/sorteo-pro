@@ -12,7 +12,7 @@ router.get('/connect', auth, (req, res) => {
   const params = new URLSearchParams({
     client_id:     process.env.META_APP_ID,
     redirect_uri:  process.env.INSTAGRAM_REDIRECT_URI,
-    scope:         'instagram_basic,instagram_business_basic,instagram_business_manage_comments,instagram_manage_comments,instagram_manage_engagement,pages_read_engagement,pages_show_list',
+    scope:         'instagram_basic,instagram_manage_comments',
     response_type: 'code',
     state:         req.userId, // pasamos el userId como state para recuperarlo en el callback
   });
