@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: #FFF7ED;
+    color: #1C1917;
+  }
+}
+
+@layer components {
+  /* ── Botones ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background-color: #EA580C;
+  }
+  .btn-primary:hover:not(:disabled) { background-color: #c2410c; }
+  .btn-primary:focus { --tw-ring-color: #EA580C; }
+
+  .btn-secondary {
+    @apply btn bg-white border-2;
+    color: #9A3412;
+    border-color: #FED7AA;
+  }
+  .btn-secondary:hover:not(:disabled) { background-color: #FFF7ED; border-color: #EA580C; }
+
+  .btn-ghost {
+    @apply btn;
+    color: #9A3412;
+    background: transparent;
+  }
+  .btn-ghost:hover:not(:disabled) { background-color: #FED7AA; }
+
+  /* ── Inputs ── */
+  .input {
+    @apply w-full rounded-xl border-2 px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none;
+    border-color: #FED7AA;
+    background-color: #fff;
+    color: #1C1917;
+  }
+  .input:focus { border-color: #EA580C; }
+  .input::placeholder { color: #a8a29e; }
+  .input.error { border-color: #dc2626; }
+
+  .label {
+    @apply block text-sm font-semibold mb-1.5;
+    color: #1C1917;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border p-6;
+    border-color: #FED7AA;
+  }
+
+  .card-hover {
+    @apply card transition-all cursor-pointer;
+  }
+  .card-hover:hover {
+    border-color: #EA580C;
+    box-shadow: 0 4px 20px rgba(234,88,12,0.12);
+  }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-orange {
+    @apply badge;
+    background-color: rgba(234,88,12,0.12);
+    color: #EA580C;
+  }
+  .badge-dark {
+    @apply badge;
+    background-color: #9A3412;
+    color: #FFF7ED;
+  }
+  .badge-accent {
+    @apply badge;
+    background-color: #FED7AA;
+    color: #9A3412;
+  }
+  .badge-green {
+    @apply badge bg-green-100 text-green-700;
+  }
+
+  /* ── Instagram gradient (decorativo) ── */
+  .ig-gradient {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  }
+  .ig-gradient-text {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Divisor ── */
+  .divider {
+    @apply border-t my-6;
+    border-color: #FED7AA;
+  }
+
+  /* ── Page header ── */
+  .page-title {
+    @apply text-2xl font-bold;
+    color: #9A3412;
+  }
+  .page-subtitle {
+    @apply text-sm mt-1;
+    color: #78716c;
+  }
+}
+
+/* Scrollbar custom */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FFF7ED; }
+::-webkit-scrollbar-thumb { background: #FED7AA; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #EA580C; }
