@@ -28,7 +28,7 @@ async function getMediaIdFromUrl(postUrl, accessToken) {
 // Obtiene todos los comentarios de una publicación (con paginación)
 async function getAllComments(mediaId, accessToken) {
   const comments = [];
-  let nextUrl = `${GRAPH_BASE}/${mediaId}/comments?fields=id,text,username,timestamp&limit=100&access_token=${accessToken}`;
+  let nextUrl = `${GRAPH_BASE}/${mediaId}/comments?fields=id,text,username,timestamp,from&limit=100&access_token=${accessToken}`;
   while (nextUrl) {
     const { data } = await axios.get(nextUrl);
     comments.push(...(data.data || []));
@@ -65,7 +65,7 @@ async function getParticipants(postUrl, filters, accessToken) {
   const map = new Map();
 
   for (const c of rawComments) {
-    const u = c.username?.toLowerCase();
+    const u = (c.username || c.from?.username)?.toLowerCase();
     if (!u) continue;
     if (!map.has(u)) map.set(u, { username: u, comments: [], liked: false });
     map.get(u).comments.push(c.text || '');
