@@ -7,19 +7,19 @@ const { getParticipants } = require('../services/instagram');
 
 const GRAPH_BASE = 'https://graph.instagram.com';
 
-// GET /api/instagram/connect  → redirige al OAuth de Meta
+// GET /api/instagram/connect  → redirige al OAuth de Meta (nueva Instagram API)
 router.get('/connect', auth, (req, res) => {
   const params = new URLSearchParams({
     client_id:     process.env.META_APP_ID,
     redirect_uri:  process.env.INSTAGRAM_REDIRECT_URI,
-    scope:         'instagram_basic,instagram_manage_comments',
+    scope:         'instagram_business_basic,instagram_manage_comments',
     response_type: 'code',
-    state:         req.userId, // pasamos el userId como state para recuperarlo en el callback
+    state:         req.userId,
   });
-  res.redirect(`https://api.instagram.com/oauth/authorize?${params.toString()}`);
+  res.redirect(`https://www.instagram.com/oauth/authorize?${params.toString()}`);
 });
 
-// GET /api/instagram/callback  → recibe el code de Meta y obtiene el token
+// GET /api/instagram/callback  → recibe el code y obtiene el token
 router.get('/callback', async (req, res) => {
   const { code, state: userId, error } = req.query;
   const appUrl = process.env.APP_URL || 'http://localhost:3000';
@@ -32,7 +32,7 @@ router.get('/callback', async (req, res) => {
   }
 
   try {
-    // 1. Intercambiar code por short-lived token
+    // 1. Intercambiar code por short-lived token (nueva Instagram API)
     const tokenRes = await axios.post('https://api.instagram.com/oauth/access_token', new URLSearchParams({
       client_id:     process.env.META_APP_ID,
       client_secret: process.env.META_APP_SECRET,
@@ -47,21 +47,21 @@ router.get('/callback', async (req, res) => {
     // 2. Intercambiar por long-lived token (60 días)
     const longRes = await axios.get(`${GRAPH_BASE}/access_token`, {
       params: {
-        grant_type:        'ig_exchange_token',
-        client_secret:     process.env.META_APP_SECRET,
-        access_token:      shortToken,
+        grant_type:    'ig_exchange_token',
+        client_secret: process.env.META_APP_SECRET,
+        access_token:  shortToken,
       },
     });
 
-    const longToken  = longRes.data.access_token;
-    const expiresIn  = longRes.data.expires_in; // segundos
+    const longToken = longRes.data.access_token;
+    const expiresIn = longRes.data.expires_in;
 
     // 3. Obtener username
     const profileRes = await axios.get(`${GRAPH_BASE}/me`, {
       params: { fields: 'id,username', access_token: longToken },
     });
 
-    const igUsername = profileRes.data.username;
+    const igUsername  = profileRes.data.username;
     const tokenExpiry = new Date(Date.now() + expiresIn * 1000);
 
     // 4. Guardar en el usuario
@@ -75,7 +75,7 @@ router.get('/callback', async (req, res) => {
     res.redirect(`${appUrl}/settings?ig_connected=1&ig_username=${encodeURIComponent(igUsername)}`);
   } catch (err) {
     console.error('[Instagram/Callback]', err.response?.data || err.message);
-    const msg = err.response?.data?.error_message || 'Error al conectar Instagram';
+    const msg = err.response?.data?.error_message || err.response?.data?.error?.message || 'Error al conectar Instagram';
     res.redirect(`${appUrl}/settings?ig_error=${encodeURIComponent(msg)}`);
   }
 });
@@ -95,7 +95,7 @@ router.delete('/disconnect', auth, async (req, res) => {
   }
 });
 
-// POST /api/instagram/participants  → obtiene participantes filtrados de una publicación
+// POST /api/instagram/participants
 router.post('/participants', auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
@@ -110,7 +110,6 @@ router.post('/participants', auth, async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('[Instagram/Participants]', err.message);
-    // Manejar errores específicos de la API de Meta
     if (err.response?.data?.error) {
       const apiErr = err.response.data.error;
       if (apiErr.code === 190) {
