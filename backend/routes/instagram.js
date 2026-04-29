@@ -12,7 +12,7 @@ router.get('/connect', auth, (req, res) => {
   const params = new URLSearchParams({
     client_id:     process.env.META_APP_ID,
     redirect_uri:  process.env.INSTAGRAM_REDIRECT_URI,
-    scope:         'instagram_business_basic,instagram_manage_comments',
+    scope:         'instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights',
     response_type: 'code',
     state:         req.userId,
   });
