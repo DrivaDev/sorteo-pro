@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 import Landing      from './pages/Landing';
+import Privacy      from './pages/Privacy';
 import Register     from './pages/Register';
 import VerifyEmail  from './pages/VerifyEmail';
 import Login        from './pages/Login';
@@ -35,6 +36,7 @@ export default function App() {
       <Route path="/raffle/:id/result" element={<Private><RaffleResult /></Private>} />
       <Route path="/raffle/:id"  element={<Private><RaffleDetail /></Private>} />
       <Route path="/settings"    element={<Private><Settings /></Private>} />
+      <Route path="/privacy"     element={<Privacy />} />
       <Route path="*"            element={<Navigate to="/" replace />} />
     </Routes>
   );
